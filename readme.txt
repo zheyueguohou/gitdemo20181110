@@ -1,1 +1,2 @@
 你好，我是git 新用户
+add text
