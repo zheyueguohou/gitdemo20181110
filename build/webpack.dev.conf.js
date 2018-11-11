@@ -22,14 +22,37 @@ const devWebpackConfig = merge(baseWebpackConfig, {
 
   // these devServer options should be customized in /config/index.js
   devServer: {
-    clientLogLevel: 'warning',
-    historyApiFallback: {
-      rewrites: [
-        { from: /.*/, to: path.posix.join(config.dev.assetsPublicPath, 'index.html') },
-      ],
+    /*
+    参考：https://vuejs-templates.github.io/webpack/proxy.html
+　　举例：localhost:8080/api/xxx 代理到 http://192.168.10.183:8103/api/xxx,如果用pathRewrite重写则代理到http://192.168.10.183:8103/xxx
+　　将'/api'转为'/'
+　　proxyTable: {
+      '/api': {// '/api':匹配项
+        target: 'http://192.168.10.183:8103',// 接口的域名
+　　　　 // secure: false,// 如果是https接口，需要配置这个参数
+        changeOrigin: true,// 如果接口跨域，需要进行这个参数配置
+　　　　　// pathRewrite: {// 如果接口本身没有/api需要通过pathRewrite来重写了地址
+　　　　　//   '^api': ''
+        // }
+
+
+      }
+    },*/
+    proxy:{
+        // 当你请求是以/api开头的时候，则我帮你代理访问到http://localhost:3000
+        // 例如：
+        // /api/users  http://localhost:3000/api/users
+        // 我们真是服务器接口是没有/api的 
+        "/api":{
+            target:"https://www.cnblogs.com",
+            pathRewrite:{"^/api":"/aggsite"},
+            changeOrigin: true,
+            secure: false //接受运行在https上的服务
+        }
     },
+    clientLogLevel: 'warning',
     hot: true,
-    contentBase: false, // since we use CopyWebpackPlugin.
+    contentBase: './', // since we use CopyWebpackPlugin.
     compress: true,
     host: HOST || config.dev.host,
     port: PORT || config.dev.port,
@@ -38,7 +61,7 @@ const devWebpackConfig = merge(baseWebpackConfig, {
       ? { warnings: false, errors: true }
       : false,
     publicPath: config.dev.assetsPublicPath,
-    proxy: config.dev.proxyTable,
+    // proxy: config.dev.proxyTable,
     quiet: true, // necessary for FriendlyErrorsPlugin
     watchOptions: {
       poll: config.dev.poll,

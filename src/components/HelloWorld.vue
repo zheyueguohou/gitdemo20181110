@@ -5,7 +5,7 @@
     <ul>
       <li>
         <a
-          href="https://vuejs.org"
+          @click="clickEvent"
           target="_blank"
         >
           Core Docs
@@ -84,11 +84,55 @@
 </template>
 
 <script>
+import Vue from 'vue'
 export default {
   name: 'HelloWorld',
   data () {
     return {
       msg: 'Welcome to Your Vue.js App'
+    }
+  },
+  mounted(){
+    console.log(Vue.in)
+    console.log(this)
+    Vue.http({
+      url: '/api/AggStats',
+      method: 'post',
+      loading: true,
+      data: {
+        query:'amwang',
+        start:'2018-11-11'
+      },
+      headers: {
+        'Content-Type': 'application/x-www-form-urlencoded'
+      },
+      transformRequest: [function (data) {
+        // Do whatever you want to transform the data
+        var ret = '';
+        for (var it in data) {
+          ret += encodeURIComponent(it) + '=' + encodeURIComponent(data[it]) + '&';
+        }
+        return ret;
+      }]
+    })
+  },
+  methods:{
+    clickEvent:function(){
+      this.$alert('这是一段内容', '标题名称', {
+          confirmButtonText: '确定',
+          callback: action => {
+            Vue.http({
+            url: '/api/AggStats',
+            method: 'post',
+            loading: true,
+            data: {
+              query:'amwang',
+              start:'2018-11-11'
+            },
+            
+          })
+          }
+        });
     }
   }
 }
