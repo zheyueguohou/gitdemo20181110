@@ -6,7 +6,7 @@ install:
 script:
     - npm run build
 after_script:
-  - ll
+  - ls -a
   - git init
   - git config user.name "${U_NAME}"
   - git config user.email "${U_EMAIL}"
