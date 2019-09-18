@@ -8,5 +8,5 @@ script:
 after_script:
   - ls
   - git add .
-  - git commit -m "aimin edit"
+  - git commit -m "aimin edit dev"
   - git push
